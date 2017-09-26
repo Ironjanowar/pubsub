@@ -19,9 +19,8 @@ defmodule Pubsub.Broker do
     receive do
       {:subscription, from, topic} ->
         Logger.info "#{inspect self()} -> Process #{inspect from} subscribes to #{topic}"
-
         add_subscriptor(state, topic, from) |> accept_loop
-      {:get_state, _from} ->
+      :get_state ->
         Logger.info "#{inspect self()} -> State #{inspect state}"
         accept_loop(state)
       _ ->
