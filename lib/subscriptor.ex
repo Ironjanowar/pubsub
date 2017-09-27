@@ -1,8 +1,12 @@
 defmodule Pubsub.Subscriptor do
   require Logger
 
-  def start do
+  @broker :broker
+
+  def start(subscriptions \\ []) when is_list(subscriptions) do
+
     pid = spawn fn -> accept_loop(MapSet.new) end
+    MapSet.new(subscriptions) |> Enum.map(fn x -> send @broker, {:subscription, pid, x} end)
     {:ok, pid}
   end
 
@@ -14,9 +18,9 @@ defmodule Pubsub.Subscriptor do
       {:subscriptions, _from} ->
         Logger.info "    Subscriptor[#{inspect self()}] -> Subscriptions #{inspect state}"
         accept_loop(state)
-      {:subscribe, topic, broker} ->
+      {:subscribe, topic} ->
         Logger.info "    Subscriptor[#{inspect self()}] -> Subscribed to #{topic}"
-        send broker, {:subscription, self(), topic}
+        send @broker, {:subscription, self(), topic}
         accept_loop(MapSet.put(state, topic))
       _ ->
         Logger.error "Unexpected message"
@@ -24,8 +28,8 @@ defmodule Pubsub.Subscriptor do
     end
   end
 
-  def subscribe_to(pid, broker, topic) do
-    send pid, {:subscribe, topic}
+  def subscribe_to(topic) do
+    send @broker, {:subscribe, topic}
     # send broker, {:subscription, self(), topic}
   end
 end

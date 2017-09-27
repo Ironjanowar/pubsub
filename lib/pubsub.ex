@@ -1,16 +1,8 @@
 defmodule Pubsub do
-  use Supervisor
+  require Logger
 
-  def start_link do
-    Supervisor.start_link __MODULE__, :ok
-  end
-
-  def init(:ok) do
-    children = [
-      worker(Pubsub.Broker, []),
-      worker(Pubsub.Subscriptor, [])
-    ]
-
-    Supervisor.init(children, strategy: :one_for_one)
+  def start() do
+    {:ok, broker} = Pubsub.Broker.start()
+    :erlang.register(:broker, broker)
   end
 end
