@@ -1,0 +1,17 @@
+* Let's make a Publisher/Subscriber!!
+The idea of this repo is to learn some beautiful Elixir making a
+pub/sub system!
+
+But we're going to do it in different ways:
+  - [X] Basic pub/sub (Only processes in Elixir/Erlang)
+  - [ ] Advanced pub/sub with behaviours: GenStage, GenServer, Agent ... (Again only in Elixir/Erlang)
+  - [ ] Separating the broker functionalities in case it needed to scale
+
+
+* Branches
+Once a version is completed we'll create a new branch
+*language/version*.
+
+But... wait a minute... *language* ??
+
+YES! If anyone wants to do it in any other language is very welcome!!
